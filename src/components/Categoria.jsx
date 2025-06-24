@@ -22,6 +22,7 @@ const Categoria = () => {
   const cargarCategorias = async () => {
     const data = await obtenerCategorias();
     setCategorias(data);
+    console.log(data);
   };
 
   const onSelectCategoria = (id) => {
@@ -47,10 +48,8 @@ const Categoria = () => {
         await Agregarcategoria(values);
         message.success("Categoría agregada exitosamente");
       }
-      form.resetFields();
-      setEditando(false);
-      setIdCategoria(null);
-      await cargarCategorias(); // Recargar lista
+      resetFormulario();
+      await cargarCategorias();
     } catch (error) {
       message.error(error);
     }
@@ -63,13 +62,17 @@ const Categoria = () => {
     try {
       await eliminarCategoria(idCategoria);
       message.success("Categoría eliminada exitosamente");
-      form.resetFields();
-      setIdCategoria(null);
-      setEditando(false);
-      await cargarCategorias(); // Recargar lista
+      resetFormulario();
+      await cargarCategorias();
     } catch (error) {
       message.error(error);
     }
+  };
+
+  const resetFormulario = () => {
+    form.resetFields();
+    setIdCategoria(null);
+    setEditando(false);
   };
 
   return (
@@ -81,11 +84,12 @@ const Categoria = () => {
         onChange={onSelectCategoria}
         allowClear
       >
-        {categorias.map((cat) => (
-          <Option key={cat.id} value={cat.id}>
-            {cat.nombre}
-          </Option>
-        ))}
+        {Array.isArray(categorias) &&
+          categorias.map((cat) => (
+            <Option key={cat.id} value={cat.id}>
+              {cat.nombre}
+            </Option>
+          ))}
       </Select>
 
       <Form
@@ -145,10 +149,20 @@ const Categoria = () => {
           <Button type="primary" htmlType="submit">
             {editando ? "Editar" : "Agregar"}
           </Button>
-          <Button danger style={{ marginLeft: 10 }} onClick={handleEliminar}>
-            Eliminar
-          </Button>
+
+          {editando && (
+            <Button style={{ marginLeft: 10 }} onClick={resetFormulario}>
+              Cancelar
+            </Button>
+          )}
+
+          {idCategoria && (
+            <Button danger style={{ marginLeft: 10 }} onClick={handleEliminar}>
+              Eliminar
+            </Button>
+          )}
         </Form.Item>
+
       </Form>
     </>
   );
