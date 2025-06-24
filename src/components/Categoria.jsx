@@ -1,60 +1,157 @@
-import React from "react";
-import { Button, Select, Form, Input } from "antd";
+import React, { useState, useEffect } from "react";
+import { Button, Select, Form, Input, message } from "antd";
+import {
+  Agregarcategoria,
+  editarCategoria,
+  eliminarCategoria,
+  obtenerCategorias,
+} from "../services/ServiceCategoria";
 
-const onFinish = (values) => {
-  console.log("Success:", values);
+const { Option } = Select;
+
+const Categoria = () => {
+  const [form] = Form.useForm();
+  const [editando, setEditando] = useState(false);
+  const [idCategoria, setIdCategoria] = useState(null);
+  const [categorias, setCategorias] = useState([]);
+
+  useEffect(() => {
+    cargarCategorias();
+  }, []);
+
+  const cargarCategorias = async () => {
+    const data = await obtenerCategorias();
+    setCategorias(data);
+  };
+
+  const onSelectCategoria = (id) => {
+    const categoria = categorias.find((c) => c.id === id);
+    if (categoria) {
+      form.setFieldsValue({
+        nombre: categoria.nombre,
+        categoria_anterior: categoria.categoria_anterior,
+        categoria_federal: categoria.categoria_federal,
+        categoria_estatal: categoria.categoria_estatal,
+      });
+      setEditando(true);
+      setIdCategoria(id);
+    }
+  };
+
+  const onFinish = async (values) => {
+    try {
+      if (editando && idCategoria) {
+        await editarCategoria(idCategoria, values);
+        message.success("Categoría editada exitosamente");
+      } else {
+        await Agregarcategoria(values);
+        message.success("Categoría agregada exitosamente");
+      }
+      form.resetFields();
+      setEditando(false);
+      setIdCategoria(null);
+      await cargarCategorias(); // Recargar lista
+    } catch (error) {
+      message.error(error);
+    }
+  };
+
+  const handleEliminar = async () => {
+    if (!idCategoria) {
+      return message.warning("Selecciona una categoría a eliminar");
+    }
+    try {
+      await eliminarCategoria(idCategoria);
+      message.success("Categoría eliminada exitosamente");
+      form.resetFields();
+      setIdCategoria(null);
+      setEditando(false);
+      await cargarCategorias(); // Recargar lista
+    } catch (error) {
+      message.error(error);
+    }
+  };
+
+  return (
+    <>
+      <h3>Seleccionar categoría para editar/eliminar</h3>
+      <Select
+        style={{ width: 400, marginBottom: 20 }}
+        placeholder="Selecciona una categoría existente"
+        onChange={onSelectCategoria}
+        allowClear
+      >
+        {categorias.map((cat) => (
+          <Option key={cat.id} value={cat.id}>
+            {cat.nombre}
+          </Option>
+        ))}
+      </Select>
+
+      <Form
+        form={form}
+        name="categoriaForm"
+        labelCol={{ span: 8 }}
+        wrapperCol={{ span: 16 }}
+        style={{ maxWidth: 600 }}
+        onFinish={onFinish}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="Nombre"
+          name="nombre"
+          rules={[{ required: true, message: "Ingresa un nombre" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="categoria_anterior"
+          label="Categoría Anterior"
+          rules={[{ required: true }]}
+        >
+          <Select placeholder="Selecciona una categoría" allowClear>
+            <Option value="cat1">Categoría 1</Option>
+            <Option value="cat2">Categoría 2</Option>
+            <Option value="cat3">Categoría 3</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="categoria_federal"
+          label="Categoría Federal"
+          rules={[{ required: true }]}
+        >
+          <Select placeholder="Selecciona una categoría" allowClear>
+            <Option value="cat1">Categoría 1</Option>
+            <Option value="cat2">Categoría 2</Option>
+            <Option value="cat3">Categoría 3</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="categoria_estatal"
+          label="Categoría Estatal"
+          rules={[{ required: true }]}
+        >
+          <Select placeholder="Selecciona una categoría" allowClear>
+            <Option value="cat1">Categoría 1</Option>
+            <Option value="cat2">Categoría 2</Option>
+            <Option value="cat3">Categoría 3</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            {editando ? "Editar" : "Agregar"}
+          </Button>
+          <Button danger style={{ marginLeft: 10 }} onClick={handleEliminar}>
+            Eliminar
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
+  );
 };
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
-const Categoria = () => (
-  <Form
-    name="basic"
-    labelCol={{ span: 8 }}
-    wrapperCol={{ span: 16 }}
-    style={{ maxWidth: 600 }}
-    initialValues={{ remember: true }}
-    onFinish={onFinish}
-    onFinishFailed={onFinishFailed}
-    autoComplete="off"
-  >
-    <Form.Item
-      label="Nombre"
-      name="nombre"
-      rules={[{ required: true, message: "Ingresa un nombre" }]}
-    >
-      <Input />
-    </Form.Item>
 
-    <Form.Item name="categoriaAnterior" label="categoria Anterior" rules={[{ required: true }]}>
-      <Select placeholder="Seleccion una categoria" allowClear>
-        <Option value="male">categoria 1</Option>
-        <Option value="female">categoria 2</Option>
-        <Option value="other">categoria 3</Option>
-      </Select>
-    </Form.Item>
-
-    <Form.Item name="categoriaFederal" label="categoria Federal" rules={[{ required: true }]}>
-      <Select placeholder="Seleccion una categoria" allowClear>
-        <Option value="male">categoria 1</Option>
-        <Option value="female">categoria 2</Option>
-        <Option value="other">categoria 3</Option>
-      </Select>
-    </Form.Item>
-
-    <Form.Item name="categoriaEstatal" label="categoria Estatal" rules={[{ required: true }]}>
-      <Select placeholder="Seleccion una categoria" allowClear>
-        <Option value="male">categoria 1</Option>
-        <Option value="female">categoria 2</Option>
-        <Option value="other">categoria 3</Option>
-      </Select>
-    </Form.Item>
-
-    <Form.Item label={null}>
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </Form.Item>
-  </Form>
-);
 export default Categoria;
