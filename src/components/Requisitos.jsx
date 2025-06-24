@@ -21,7 +21,7 @@ const Requisito = () => (
         autoComplete="off"
     >
         <Form.Item
-            label="Descripcionasdasdas"
+            label="Descripcion"
             name="Descripcion"
             rules={[{ required: true, message: "Please input your Descripcion!" }]}
         >
