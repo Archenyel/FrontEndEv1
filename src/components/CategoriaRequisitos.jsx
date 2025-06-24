@@ -7,7 +7,7 @@ const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 
-const Requisito = () => (
+const CategoriaRequisito = () => (
   <div>
     <Form
       name="basic"
@@ -19,14 +19,30 @@ const Requisito = () => (
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
-      <Form.Item
-        label="Descripcion"
-        name="descripcion"
-        rules={[{ required: true, message: "Please input your Descripcion!" }]}
-      >
-        <Input />
+
+      <Form.Item label="Categoria" name="categoria">
+        <Select
+          showSearch
+          style={{ width: 200 }}
+          placeholder="Selecciona una opción"
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          <Option value="Tipo 1">categoria 1</Option>
+          <Option value="Tipo 2">categoria 2</Option>
+          <Option value="Tipo 3">categoria 3</Option>
+          <Option value="Tipo 4">categoria 4</Option>
+        </Select>
       </Form.Item>
-      <Form.Item label="Tipo" name="tipo">
+      <Form.Item label={null}>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+
+            <Form.Item label="Tipo" name="tipo">
         <Select
           showSearch
           style={{ width: 200 }}
@@ -50,4 +66,4 @@ const Requisito = () => (
     </Form>
   </div>
 );
-export default Requisito;
+export default CategoriaRequisito;
