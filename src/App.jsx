@@ -1,15 +1,15 @@
-import { useState } from 'react'
 import TipoRequisito from './components/TipoRequisito'
-import './App.css'
+import Requisito from './components/Requisitos'
+
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <TipoRequisito />
-      <TipoRequisito />
-      <TipoRequisito />
+      <h2>Requisitos</h2>
+      <Requisito />
+
     </>
   )
 }
