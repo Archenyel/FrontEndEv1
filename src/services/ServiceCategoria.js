@@ -24,7 +24,7 @@ export const Agregarrequisitos = async (values) => {
 
 export const AgregarTipoRequisito = async (values) => {
   try {
-    const response = await api.post("/tipo-requisitos", values);
+    const response = await api.post("/tipos", values);
     console.log("Respuesta del backend:", response.data);
     return response.data;
   } catch (error) {
@@ -35,21 +35,18 @@ export const AgregarTipoRequisito = async (values) => {
 
 export const obtenerCategoria = async (soloActivos = false) => {
   const res = await api.get(`/obtener-categoria`, {
-    params: { soloActivos },
   });
   return res.data;
 };
 
 export const obtenerRequisitos = async (soloActivos = false) => {
   const res = await api.get(`/obtener-requisito`, {
-    params: { soloActivos },
   });
   return res.data;
 };
 
 export const obtenerTipoRequisitos = async (soloActivos = false) => {
-  const res = await api.get(`/obtener-Tiporequisito`, {
-    params: { soloActivos },
+  const res = await api.get(`/tipos`, {
   });
   return res.data;
 };
