@@ -17,7 +17,7 @@ export const Agregarrequisitos = async (values) => {
     const body = {
       descripcion: values.descripcion,
     };
-    const response = await api.post(`/requisitos/0?idTipo=${idTipo}`, body);
+    const response = await api.post(`/requisitos/${idTipo}`, body);
     console.log("Respuesta del backend:", response.data);
     return response.data;
   } catch (error) {

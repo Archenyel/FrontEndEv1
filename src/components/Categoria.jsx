@@ -114,11 +114,7 @@ const Categoria = () => {
           label="Categoría Anterior"
           rules={[{ required: true }]}
         >
-          <Select placeholder="Selecciona una categoría" allowClear>
-            <Option value="cat1">Categoría 1</Option>
-            <Option value="cat2">Categoría 2</Option>
-            <Option value="cat3">Categoría 3</Option>
-          </Select>
+         <Input />
         </Form.Item>
 
         <Form.Item
@@ -126,11 +122,7 @@ const Categoria = () => {
           label="Categoría Federal"
           rules={[{ required: true }]}
         >
-          <Select placeholder="Selecciona una categoría" allowClear>
-            <Option value="cat1">Categoría 1</Option>
-            <Option value="cat2">Categoría 2</Option>
-            <Option value="cat3">Categoría 3</Option>
-          </Select>
+         <Input />
         </Form.Item>
 
         <Form.Item
@@ -138,11 +130,7 @@ const Categoria = () => {
           label="Categoría Estatal"
           rules={[{ required: true }]}
         >
-          <Select placeholder="Selecciona una categoría" allowClear>
-            <Option value="cat1">Categoría 1</Option>
-            <Option value="cat2">Categoría 2</Option>
-            <Option value="cat3">Categoría 3</Option>
-          </Select>
+         <Input />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
